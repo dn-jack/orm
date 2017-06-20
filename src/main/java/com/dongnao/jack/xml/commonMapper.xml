@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.dongnao.jack.dao.CommonDao" >
+	<resultMap id="ContentResultMap" type="com.dongnao.jack.bean.ConsultContent" >
+		<result column="ID" property="id"/>
+		<result column="ITEMINDEX" property="itemIndex"/>
+		<result column="CONTENT" property="content"/>
+		<result column="TYPE" property="type"/>
+		<result column="STATE" property="state"/>
+		<result column="AREACODE" property="areaCode"/>
+	</resultMap>
+	<select id="queryConsultContent" parameterType="java.util.Map" resultMap="ContentResultMap">
+		select * from consult_content
+	</select>
+</mapper>
