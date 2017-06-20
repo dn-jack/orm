@@ -1,5 +1,6 @@
 package com.dongnao.jack.invocation;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -59,6 +60,9 @@ public class OrmInvocationHandler implements InvocationHandler {
         if ("select".equals(temp.getOperTypeStr())) {
             return select(temp, resultMapxml.get(temp.getResultMap()));
         }
+        else if ("insert".equals(temp.getOperTypeStr())) {
+            return insert(temp, args);
+        }
         return null;
     }
     
@@ -71,4 +75,54 @@ public class OrmInvocationHandler implements InvocationHandler {
         return obj;
     }
     
+    private Integer insert(XmlTemplate xt, Object[] args) {
+        try {
+            String sql = xt.getContent();
+            
+            String pre = sql.substring(0, sql.indexOf("#"));
+            
+            String last = sql.substring(sql.indexOf("#") + 1,
+                    sql.lastIndexOf("#"));
+            last = last.substring(last.indexOf("(") + 1, last.lastIndexOf(")"));
+            
+            Class<?> clazz = args[0].getClass();
+            String[] arry = last.split(",");
+            StringBuffer replaceStr = new StringBuffer();
+            replaceStr.append("(");
+            for (String arr : arry) {
+                
+                Field field = clazz.getField(arr);
+                if (field.getType() == String.class) {
+                    replaceStr.append("'" + field.get(args[0]) + "'")
+                            .append(",");
+                }
+                else {
+                    replaceStr.append(field.get(args[0])).append(",");
+                }
+            }
+            String str = replaceStr.toString();
+            str = str.substring(0, str.lastIndexOf(","));
+            str = str + ")";
+            
+            sql = pre + str;
+            
+            System.out.println(sql);
+            PooledConnection con = pool.getConnection();
+            int count = con.updateBySql(sql);
+            return count;
+        }
+        catch (NoSuchFieldException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

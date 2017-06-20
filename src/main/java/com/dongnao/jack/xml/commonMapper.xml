@@ -11,4 +11,7 @@
 	<select id="queryConsultContent" parameterType="java.util.Map" resultMap="ContentResultMap">
 		select * from consult_content
 	</select>
+	<insert id="insertConsultContent" parameterType="com.dongnao.jack.bean.ConsultContent">
+		insert into consult_content(itemIndex,content,type,state) values #(itemIndex,content,type,state)# 
+	</insert>
 </mapper>

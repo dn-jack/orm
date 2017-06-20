@@ -26,5 +26,13 @@ public class Test {
             System.out.print(content.getItemIndex() + "\t");
             System.out.print("\n");
         }
+        
+        ConsultContent content = new ConsultContent();
+        content.setContent("ÎÒÒª²âÊÔ£¡113");
+        content.setItemIndex(23);
+        content.setState(1);
+        content.setType("0");
+        int count = (Integer)dao.insertConsultContent(content);
+        System.out.println(count);
     }
 }

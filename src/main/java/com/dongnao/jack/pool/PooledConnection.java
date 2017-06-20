@@ -37,6 +37,7 @@ public class PooledConnection {
         try {
             sm = conn.createStatement();
             count = sm.executeUpdate(sql);
+            conn.commit();
         }
         catch (SQLException e) {
             e.printStackTrace();

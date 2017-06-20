@@ -9,4 +9,6 @@ import com.dongnao.jack.bean.ConsultContent;
 @Repository
 public interface CommonDao {
     List<ConsultContent> queryConsultContent(Map<?, ?> map);
+    
+    int insertConsultContent(ConsultContent content);
 }
